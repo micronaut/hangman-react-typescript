@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, MouseEvent } from "react";
 import "./App.css";
+import { words } from './words';
 
 enum ShapeType {
   Line = "line",
@@ -52,7 +53,8 @@ const App: React.FC = () => {
       coords: [[300, 200], [250, 230]]
     }
   ];
-  const word = "foobar";
+
+  const [word] = useState(words[Math.floor(Math.random() * words.length)]);
   const canvasRef: React.MutableRefObject<any> = React.useRef(null);
 
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
@@ -62,8 +64,8 @@ const App: React.FC = () => {
   ) as string[]);
   const [gameState, setGameState] = useState({ done: false, won: false });
 
-  const handleCharClick: any = (e: any) => {
-    let selectedChar = e.currentTarget.textContent;
+  const handleCharClick = (e: MouseEvent<HTMLButtonElement>): void => {
+    let selectedChar: string = e.currentTarget.textContent || '';
     if (word.indexOf(selectedChar) === -1) {
       drawNextshape();
     }
@@ -77,7 +79,7 @@ const App: React.FC = () => {
     });
   };
 
-  const drawNextshape: any = () => {
+  const drawNextshape = (): void => {
     let index = currentShapeIndex;
     setCurrentShapeIndex(index + 1);
 
@@ -105,7 +107,7 @@ const App: React.FC = () => {
       </div>
       <div>
         {word.split("").map(c => (
-          <span>{guessedChars.includes(c) ? ` ${c} ` : " _ "}</span>
+          <span key={c} >{guessedChars.includes(c) ? ` ${c} ` : " _ "}</span>
         ))}
       </div>
       <div>
