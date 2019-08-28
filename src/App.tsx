@@ -1,6 +1,6 @@
 import React, { useState, MouseEvent } from "react";
 import "./App.css";
-import { words } from './words';
+import { words } from "./words";
 
 enum ShapeType {
   Line = "line",
@@ -54,18 +54,24 @@ const App: React.FC = () => {
     }
   ];
 
-  const [word] = useState(words[Math.floor(Math.random() * words.length)]);
+  const getNextWord = () : string => {
+    const n = words.splice(Math.floor(Math.random() * words.length), 1);
+    return n.pop() || '';
+  };
+
+  const [word, setWord] = useState(() => getNextWord());
+
   const canvasRef: React.MutableRefObject<any> = React.useRef(null);
 
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
   const [guessedChars, setGuessedChars] = useState([] as string[]);
   const [charsLeftToGuess, setCharsLeftToGuess] = useState(word.split(
     ""
-  ) as string[]);
+  ).filter(c => c !== " ") as string[]);
   const [gameState, setGameState] = useState({ done: false, won: false });
 
   const handleCharClick = (e: MouseEvent<HTMLButtonElement>): void => {
-    let selectedChar: string = e.currentTarget.textContent || '';
+    let selectedChar: string = e.currentTarget.textContent || "";
     if (word.indexOf(selectedChar) === -1) {
       drawNextshape();
     }
@@ -78,6 +84,24 @@ const App: React.FC = () => {
       won: charsLeft.length === 0
     });
   };
+
+  const handleNewGameClick = (): void => {
+    const newWord = getNextWord();
+    setWord(newWord);
+    setCurrentShapeIndex(0);
+    setGuessedChars([]);
+    setGameState({
+      done: false,
+      won: false
+    });
+    setCharsLeftToGuess(newWord.split(
+      ""
+    ).filter(c => c !== " "));
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 
   const drawNextshape = (): void => {
     let index = currentShapeIndex;
@@ -103,16 +127,19 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div>
-        <canvas ref={canvasRef} id="hangman" height={320} width={540} />
+        <button onClick={handleNewGameClick}>New Game</button>
       </div>
       <div>
-        {word.split("").map(c => (
-          <span key={c} >{guessedChars.includes(c) ? ` ${c} ` : " _ "}</span>
+        <canvas ref={canvasRef} id="hangman" height={320} width={540} />
+      </div>
+      <div className="word-display">
+        {word.split("").map((c, idx) => (
+          <span className="word-char" key={`c-${idx}`}>{guessedChars.includes(c) ? `${c}` : c === " " ? " - " : "_"}</span>
         ))}
       </div>
       <div>
         {"abcdefghijklmnopqrstuvwxyz".split("").map(c => (
-          <button
+          <button className="char-button"
             key={c}
             onClick={e => handleCharClick(e)}
             disabled={guessedChars.includes(c) || gameState.done}
@@ -121,7 +148,7 @@ const App: React.FC = () => {
           </button>
         ))}
       </div>
-      <div>
+      <div className={`result ${gameState.won ? 'winner' : 'loser'}`}>
         {gameState.done && gameState.won
           ? "You Win!"
           : gameState.done

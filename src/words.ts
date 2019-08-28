@@ -10,4 +10,5 @@ export const words = [
     'name',
     'condemned',
     'subtract',
+    'grocery list',
 ];

@@ -2,3 +2,31 @@
   text-align: center;
 }
 
+.char-button {
+  height: 30px;
+  width: 30px;
+  border-radius: 10px;
+  margin: 15px 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.word-display {
+  font-size: 30px;
+}
+
+.word-char {
+  margin: 10px;
+}
+
+.result {
+  font-size: 40px;
+}
+
+.winner {
+  color: green;
+}
+
+.loser {
+  color: red;
+}
