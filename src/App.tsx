@@ -124,17 +124,17 @@ const App: React.FC = () => {
     setCurrentShapeIndex(index + 1);
 
     let {
-      coords: [{ x: sx, y: sy }, { x: ex, y: ey }],
+      coords: [{ x: startX, y: startY }, { x: endX, y: endY }],
       shape
     } = SHAPES[index];
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.beginPath();
     if (shape === ShapeType.Arc) {
-      ctx.arc(300, 100, 20, (sx * Math.PI) / 180, (sy * Math.PI) / 180, true);
+      ctx.arc(300, 100, 20, (startX * Math.PI) / 180, (startY * Math.PI) / 180, true);
     } else {
-      ctx.moveTo(sx, sy);
-      ctx.lineTo(ex, ey);
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
       ctx.closePath();
     }
     ctx.stroke();
