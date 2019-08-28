@@ -1,28 +1,65 @@
 import React, { useState } from "react";
 import "./App.css";
 
+enum ShapeType {
+  Line = "line",
+  Arc = "arc"
+}
+
+type Coord = [number, number];
+
+interface Shape {
+  name: string;
+  shape: ShapeType;
+  coords: [Coord, Coord];
+}
+
 const App: React.FC = () => {
-  const SHAPES = [
-    { name: "base", shape: "line", coords: [[80, 300], [160, 300]] },
-    { name: "post", shape: "line", coords: [[120, 300], [120, 45]] },
-    { name: "horizontal-bar", shape: "line", coords: [[120, 45], [300, 45]] },
-    { name: "vertical-bar", shape: "line", coords: [[300, 45], [300, 80]] },
-    { name: "head-right", shape: "arc", coords: [[90, 270], [0, 0]] },
-    { name: "head-left", shape: "arc", coords: [[90, -270], [0, 0]] },
-    { name: "body", shape: "line", coords: [[300, 120], [300, 200]] },
-    { name: "left-arm", shape: "line", coords: [[300, 140], [250, 120]] },
-    { name: "right-arm", shape: "line", coords: [[300, 140], [350, 120]] },
-    { name: "left-leg", shape: "line", coords: [[300, 200], [350, 230]] },
-    { name: "right-leg", shape: "line", coords: [[300, 200], [250, 230]] }
+  const SHAPES: Shape[] = [
+    { name: "base", shape: ShapeType.Line, coords: [[80, 300], [160, 300]] },
+    { name: "post", shape: ShapeType.Line, coords: [[120, 300], [120, 45]] },
+    {
+      name: "horizontal-bar",
+      shape: ShapeType.Line,
+      coords: [[120, 45], [300, 45]]
+    },
+    {
+      name: "vertical-bar",
+      shape: ShapeType.Line,
+      coords: [[300, 45], [300, 80]]
+    },
+    { name: "head-right", shape: ShapeType.Arc, coords: [[90, 270], [0, 0]] },
+    { name: "head-left", shape: ShapeType.Arc, coords: [[90, -270], [0, 0]] },
+    { name: "body", shape: ShapeType.Line, coords: [[300, 120], [300, 200]] },
+    {
+      name: "left-arm",
+      shape: ShapeType.Line,
+      coords: [[300, 140], [250, 120]]
+    },
+    {
+      name: "right-arm",
+      shape: ShapeType.Line,
+      coords: [[300, 140], [350, 120]]
+    },
+    {
+      name: "left-leg",
+      shape: ShapeType.Line,
+      coords: [[300, 200], [350, 230]]
+    },
+    {
+      name: "right-leg",
+      shape: ShapeType.Line,
+      coords: [[300, 200], [250, 230]]
+    }
   ];
   const word = "foobar";
   const canvasRef: React.MutableRefObject<any> = React.useRef(null);
+
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
   const [guessedChars, setGuessedChars] = useState([] as string[]);
   const [charsLeftToGuess, setCharsLeftToGuess] = useState(word.split(
     ""
   ) as string[]);
-
   const [gameState, setGameState] = useState({ done: false, won: false });
 
   const handleCharClick: any = (e: any) => {
@@ -51,7 +88,7 @@ const App: React.FC = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.beginPath();
-    if (shape === "arc") {
+    if (shape === ShapeType.Arc) {
       ctx.arc(300, 100, 20, (sx * Math.PI) / 180, (sy * Math.PI) / 180, true);
     } else {
       ctx.moveTo(sx, sy);
