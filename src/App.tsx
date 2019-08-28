@@ -50,7 +50,7 @@ const App: React.FC = () => {
     {
       name: "body",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 120 }, { x: 300, y: 20 }]
+      coords: [{ x: 300, y: 120 }, { x: 300, y: 200 }]
     },
     {
       name: "left-arm",
@@ -143,13 +143,18 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div>
-        <button onClick={handleNewGameClick}>New Game</button>
+        <button className="new-game" onClick={handleNewGameClick}>New Game</button>
       </div>
       <div>
         <canvas ref={canvasRef} id="hangman" height={320} width={540} />
       </div>
       <div className="word-display">
         {word.split("").map((c, idx) => (
+          gameState.done ?
+          <span className="word-char" key={`c-${idx}`}>
+            {c === " " ? " - " : c}
+          </span>
+          :
           <span className="word-char" key={`c-${idx}`}>
             {guessedChars.includes(c) ? `${c}` : c === " " ? " - " : "_"}
           </span>

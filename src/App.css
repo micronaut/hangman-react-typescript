@@ -17,6 +17,7 @@
 
 .word-char {
   margin: 10px;
+  text-decoration: underline;
 }
 
 .result {
@@ -29,4 +30,11 @@
 
 .loser {
   color: red;
+}
+
+.new-game {
+  font-size: 20px;
+  background-color: darkkhaki;
+  border-radius: 5px;
+  margin: 30px;
 }
