@@ -7,57 +7,75 @@ enum ShapeType {
   Arc = "arc"
 }
 
-type Coord = [number, number];
+type Coordinate = { x: number; y: number };
 
 interface Shape {
   name: string;
   shape: ShapeType;
-  coords: [Coord, Coord];
+  coords: [Coordinate, Coordinate];
 }
 
 const App: React.FC = () => {
   const SHAPES: Shape[] = [
-    { name: "base", shape: ShapeType.Line, coords: [[80, 300], [160, 300]] },
-    { name: "post", shape: ShapeType.Line, coords: [[120, 300], [120, 45]] },
+    {
+      name: "base",
+      shape: ShapeType.Line,
+      coords: [{ x: 80, y: 300 }, { x: 160, y: 300 }]
+    },
+    {
+      name: "post",
+      shape: ShapeType.Line,
+      coords: [{ x: 120, y: 300 }, { x: 120, y: 45 }]
+    },
     {
       name: "horizontal-bar",
       shape: ShapeType.Line,
-      coords: [[120, 45], [300, 45]]
+      coords: [{ x: 120, y: 45 }, { x: 300, y: 45 }]
     },
     {
       name: "vertical-bar",
       shape: ShapeType.Line,
-      coords: [[300, 45], [300, 80]]
+      coords: [{ x: 300, y: 45 }, { x: 300, y: 80 }]
     },
-    { name: "head-right", shape: ShapeType.Arc, coords: [[90, 270], [0, 0]] },
-    { name: "head-left", shape: ShapeType.Arc, coords: [[90, -270], [0, 0]] },
-    { name: "body", shape: ShapeType.Line, coords: [[300, 120], [300, 200]] },
+    {
+      name: "head-right",
+      shape: ShapeType.Arc,
+      coords: [{ x: 90, y: 270 }, { x: 0, y: 0 }]
+    },
+    {
+      name: "head-left",
+      shape: ShapeType.Arc,
+      coords: [{ x: 90, y: -270 }, { x: 0, y: 0 }]
+    },
+    {
+      name: "body",
+      shape: ShapeType.Line,
+      coords: [{ x: 300, y: 120 }, { x: 300, y: 20 }]
+    },
     {
       name: "left-arm",
       shape: ShapeType.Line,
-      coords: [[300, 140], [250, 120]]
+      coords: [{ x: 300, y: 140 }, { x: 250, y: 120 }]
     },
     {
       name: "right-arm",
       shape: ShapeType.Line,
-      coords: [[300, 140], [350, 120]]
+      coords: [{ x: 300, y: 140 }, { x: 350, y: 120 }]
     },
     {
       name: "left-leg",
       shape: ShapeType.Line,
-      coords: [[300, 200], [350, 230]]
+      coords: [{ x: 300, y: 200 }, { x: 350, y: 230 }]
     },
     {
       name: "right-leg",
       shape: ShapeType.Line,
-      coords: [[300, 200], [250, 230]]
+      coords: [{ x: 300, y: 200 }, { x: 250, y: 230 }]
     }
   ];
 
-  const getNextWord = () : string => {
-    const n = words.splice(Math.floor(Math.random() * words.length), 1);
-    return n.pop() || '';
-  };
+  const getNextWord = (): string =>
+    words.splice(Math.floor(Math.random() * words.length), 1).pop() || "";
 
   const [word, setWord] = useState(() => getNextWord());
 
@@ -65,9 +83,9 @@ const App: React.FC = () => {
 
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
   const [guessedChars, setGuessedChars] = useState([] as string[]);
-  const [charsLeftToGuess, setCharsLeftToGuess] = useState(word.split(
-    ""
-  ).filter(c => c !== " ") as string[]);
+  const [charsLeftToGuess, setCharsLeftToGuess] = useState(
+    word.split("").filter(c => c !== " ")
+  );
   const [gameState, setGameState] = useState({ done: false, won: false });
 
   const handleCharClick = (e: MouseEvent<HTMLButtonElement>): void => {
@@ -94,21 +112,19 @@ const App: React.FC = () => {
       done: false,
       won: false
     });
-    setCharsLeftToGuess(newWord.split(
-      ""
-    ).filter(c => c !== " "));
+    setCharsLeftToGuess(newWord.split("").filter(c => c !== " "));
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
+  };
 
   const drawNextshape = (): void => {
     let index = currentShapeIndex;
     setCurrentShapeIndex(index + 1);
 
     let {
-      coords: [[sx, sy], [ex, ey]],
+      coords: [{ x: sx, y: sy }, { x: ex, y: ey }],
       shape
     } = SHAPES[index];
     const canvas = canvasRef.current;
@@ -134,12 +150,15 @@ const App: React.FC = () => {
       </div>
       <div className="word-display">
         {word.split("").map((c, idx) => (
-          <span className="word-char" key={`c-${idx}`}>{guessedChars.includes(c) ? `${c}` : c === " " ? " - " : "_"}</span>
+          <span className="word-char" key={`c-${idx}`}>
+            {guessedChars.includes(c) ? `${c}` : c === " " ? " - " : "_"}
+          </span>
         ))}
       </div>
       <div>
         {"abcdefghijklmnopqrstuvwxyz".split("").map(c => (
-          <button className="char-button"
+          <button
+            className="char-button"
             key={c}
             onClick={e => handleCharClick(e)}
             disabled={guessedChars.includes(c) || gameState.done}
@@ -148,7 +167,7 @@ const App: React.FC = () => {
           </button>
         ))}
       </div>
-      <div className={`result ${gameState.won ? 'winner' : 'loser'}`}>
+      <div className={`result ${gameState.won ? "winner" : "loser"}`}>
         {gameState.done && gameState.won
           ? "You Win!"
           : gameState.done
