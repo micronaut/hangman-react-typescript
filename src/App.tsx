@@ -12,7 +12,7 @@ type Coordinate = { x: number; y: number };
 interface Shape {
   name: string;
   shape: ShapeType;
-  coords: [Coordinate, Coordinate];
+  coords: {start: Coordinate, end: Coordinate};
 }
 
 const App: React.FC = () => {
@@ -20,57 +20,57 @@ const App: React.FC = () => {
     {
       name: "base",
       shape: ShapeType.Line,
-      coords: [{ x: 80, y: 300 }, { x: 160, y: 300 }]
+      coords: {start: { x: 80, y: 300 }, end:{ x: 160, y: 300 }}
     },
     {
       name: "post",
       shape: ShapeType.Line,
-      coords: [{ x: 120, y: 300 }, { x: 120, y: 45 }]
+      coords: {start: { x: 120, y: 300 }, end: { x: 120, y: 45 }}
     },
     {
       name: "horizontal-bar",
       shape: ShapeType.Line,
-      coords: [{ x: 120, y: 45 }, { x: 300, y: 45 }]
+      coords: {start: { x: 120, y: 45 }, end: { x: 300, y: 45 }}
     },
     {
       name: "vertical-bar",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 45 }, { x: 300, y: 80 }]
+      coords: {start: { x: 300, y: 45 }, end: { x: 300, y: 80 }}
     },
     {
       name: "head-right",
       shape: ShapeType.Arc,
-      coords: [{ x: 90, y: 270 }, { x: 0, y: 0 }]
+      coords: {start: { x: 90, y: 270 }, end: { x: 0, y: 0 }}
     },
     {
       name: "head-left",
       shape: ShapeType.Arc,
-      coords: [{ x: 90, y: -270 }, { x: 0, y: 0 }]
+      coords: {start: { x: 90, y: -270 }, end: { x: 0, y: 0 }}
     },
     {
       name: "body",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 120 }, { x: 300, y: 200 }]
+      coords: {start: { x: 300, y: 120 }, end: { x: 300, y: 200 }}
     },
     {
       name: "left-arm",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 140 }, { x: 250, y: 120 }]
+      coords: {start: { x: 300, y: 140 }, end: { x: 250, y: 120 }}
     },
     {
       name: "right-arm",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 140 }, { x: 350, y: 120 }]
+      coords: {start: { x: 300, y: 140 }, end: { x: 350, y: 120 }}
     },
     {
       name: "left-leg",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 200 }, { x: 350, y: 230 }]
+      coords: {start: { x: 300, y: 200 }, end: { x: 350, y: 230 }}
     },
     {
       name: "right-leg",
       shape: ShapeType.Line,
-      coords: [{ x: 300, y: 200 }, { x: 250, y: 230 }]
+      coords: {start: { x: 300, y: 200 }, end: { x: 250, y: 230 }}
     }
   ];
 
@@ -124,7 +124,7 @@ const App: React.FC = () => {
     setCurrentShapeIndex(index + 1);
 
     let {
-      coords: [{ x: startX, y: startY }, { x: endX, y: endY }],
+      coords: {start: { x: startX, y: startY }, end: { x: endX, y: endY }},
       shape
     } = SHAPES[index];
     const canvas = canvasRef.current;
