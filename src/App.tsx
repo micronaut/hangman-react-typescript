@@ -1,88 +1,17 @@
 import React, { useState, MouseEvent } from "react";
 import "./App.css";
 import { words } from "./words";
-
-enum ShapeType {
-  Line = "line",
-  Arc = "arc"
-}
-
-type Coordinate = { x: number; y: number };
-
-interface Shape {
-  name: string;
-  shape: ShapeType;
-  coords: { start: Coordinate; end: Coordinate };
-}
+import { ShapeType } from "./ShapeType";
+import { SHAPES } from "./contants";
 
 const App: React.FC = () => {
-  const SHAPES: Array<Shape> = [
-    {
-      name: "base",
-      shape: ShapeType.Line,
-      coords: { start: { x: 80, y: 300 }, end: { x: 160, y: 300 } }
-    },
-    {
-      name: "post",
-      shape: ShapeType.Line,
-      coords: { start: { x: 120, y: 300 }, end: { x: 120, y: 45 } }
-    },
-    {
-      name: "horizontal-bar",
-      shape: ShapeType.Line,
-      coords: { start: { x: 120, y: 45 }, end: { x: 300, y: 45 } }
-    },
-    {
-      name: "vertical-bar",
-      shape: ShapeType.Line,
-      coords: { start: { x: 300, y: 45 }, end: { x: 300, y: 80 } }
-    },
-    {
-      name: "head-right",
-      shape: ShapeType.Arc,
-      coords: { start: { x: 90, y: 270 }, end: { x: 0, y: 0 } }
-    },
-    {
-      name: "head-left",
-      shape: ShapeType.Arc,
-      coords: { start: { x: 90, y: -270 }, end: { x: 0, y: 0 } }
-    },
-    {
-      name: "body",
-      shape: ShapeType.Line,
-      coords: { start: { x: 300, y: 120 }, end: { x: 300, y: 200 } }
-    },
-    {
-      name: "left-arm",
-      shape: ShapeType.Line,
-      coords: { start: { x: 300, y: 140 }, end: { x: 250, y: 120 } }
-    },
-    {
-      name: "right-arm",
-      shape: ShapeType.Line,
-      coords: { start: { x: 300, y: 140 }, end: { x: 350, y: 120 } }
-    },
-    {
-      name: "left-leg",
-      shape: ShapeType.Line,
-      coords: { start: { x: 300, y: 200 }, end: { x: 350, y: 230 } }
-    },
-    {
-      name: "right-leg",
-      shape: ShapeType.Line,
-      coords: { start: { x: 300, y: 200 }, end: { x: 250, y: 230 } }
-    }
-  ];
-
+  const canvasRef: React.MutableRefObject<any> = React.useRef(null);
   const getNextWord = (): string =>
     words.splice(Math.floor(Math.random() * words.length), 1).pop() || "";
 
   const [word, setWord] = useState(() => getNextWord());
-
-  const canvasRef: React.MutableRefObject<any> = React.useRef(null);
-
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
-  const [guessedChars, setGuessedChars] = useState([] as string[]);
+  const [guessedChars, setGuessedChars] = useState(new Array<string>());
   const [charsLeftToGuess, setCharsLeftToGuess] = useState(
     word.split("").filter(c => c !== " ")
   );
